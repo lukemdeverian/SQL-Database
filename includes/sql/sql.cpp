@@ -13,6 +13,7 @@ Table SQL::command(string theCommand){
     _ptree = p.parse_tree();
 
     string cmd = _ptree["command"][0];
+    //cout << "cmd: " << cmd << endl;
     if(cmd == "make" || cmd == "create"){
         string tableName = _ptree["table_name"][0];
         vector<string> fields = _ptree["fields"];
@@ -34,9 +35,9 @@ Table SQL::command(string theCommand){
             _records_selected = return_me.select_recnos();
             return return_me;
         } else{
-            
-            //Table return_me = _tables[tableName].select(fields);
-
+            Table return_me = _tables[tableName].selectAll(fields);
+            _records_selected = return_me.select_recnos();
+            return return_me;
         }
         
     }

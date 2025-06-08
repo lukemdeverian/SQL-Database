@@ -36,6 +36,7 @@ public:
     Table select(vector<string> desiredFields, string p, string desiredOperator, string q);
     Table select(vector<string> desiredFields, Queue<TokenTable*> postfix);
     Table select(vector<string> desiredFields, vector<string> infix);
+    Table selectAll(vector<string> desiredFields);
     vector<long> table_to_vector(string p, string op, string q);
     Table vectorToTable(vector<long> desiredRecords, string tName);
     vector<long> select_recnos();

@@ -1910,3 +1910,11 @@ vector<long> applyLogical(vector<long> LHS, vector<long> RHS, string logical){
 Table operator+(const Table& lhs, const Table& rhs){
     return Table(); //unused
 }
+
+Table Table::selectAll(vector<string> desiredFields){
+    _records_PQ.clear();
+    for(long i = 0; i < _last_record; i++){
+        _records_PQ.push_back(i);
+    }
+    return *this;
+}
