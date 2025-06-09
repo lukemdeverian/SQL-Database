@@ -1,6 +1,7 @@
 #include "gtest/gtest.h"
 #include <iostream>
 #include <iomanip>
+#include "../../includes/table/table.h"
 using namespace std;
 
 bool test_stub(bool debug = false)
@@ -8,6 +9,12 @@ bool test_stub(bool debug = false)
   if (debug){
     cout << "testB:: test-sub() entering test_sub" << endl;
   }
+
+  vector<long> e;
+  vector<long> p = {1,2,3,4,5};
+  string s = "or";
+  vector<long> r = applyLogical(e, p, s);
+  cout << "r: " << r << endl;
   return true;
 }
 

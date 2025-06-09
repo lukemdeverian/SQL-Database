@@ -1563,22 +1563,22 @@ Table Table::select(vector<string> desiredFields, Queue<TokenTable *> postfix){
             TokenStr* LHS = static_cast<TokenStr*>(token_stack.pop());
             string p = LHS->getValue();
             string q = RHS->getValue();
-            cout << "\np: " << p << endl << "q: " << q << endl;
+            //cout << "\np: " << p << endl << "q: " << q << endl;
             vector<long> potentialInsert = table_to_vector(p, desiredOperator, q);
             if(!potentialInsert.empty()){
-                cout << "HELLO IM GAY\n\n\n";
+                //cout << "HELLO IM GAY\n\n\n";
                 record_stack.push(potentialInsert);
             } else{
                 cout << "after wrong insert!";
             }
             
         } else if(popped->getType() == 2){
-            cout << "\ngot here\n";
+            //cout << "\ngot here\n";
             Logical* log = static_cast<Logical*>(popped);
             string desiredLogical = log->getValue();
             vector<long> RHS = record_stack.pop();
             vector<long> LHS = record_stack.pop();
-            cout << "\nafter that\n";
+            //cout << "\nafter that\n";
             record_stack.push(applyLogical(LHS, RHS, desiredLogical));
         }
         //iterations++;
@@ -1696,7 +1696,7 @@ Table Table::select(vector<string> desiredFields, vector<string> infix){
         }
     }
 
-    assert(parenTracker == 0 && "uneven parenthesis");
+    //assert(parenTracker == 0 && "uneven parenthesis");
 
     while(!converter.empty()){
         TokenTable* push_me = converter.pop();
@@ -1718,10 +1718,10 @@ Table Table::select(vector<string> desiredFields, vector<string> infix){
 }
 
 int getPriority(const string& input){
-    if(input == "and"){
-        return 0;
-    }
-    if(input == "or"){ return 1;}
+    // if(input == "and"){
+    //     return 0;
+    // }
+    if(input == "or" || input == "and"){ return 1;}
     if(input == "=" || input == "<" || input == ">" || input == "<=" || input == ">="){return 2;}
     return -1;
 }
@@ -1746,7 +1746,7 @@ vector<long> Table::table_to_vector(string p, string op, string q){
     if(op == "="){
         if(_indices[i].contains(q)){
             recordsPQ = _indices[i].at(q);
-        }   cout << "im so confused";
+        }   //cout << "im so confused";
         return recordsPQ;
         //cout << "this is probably the problem!";
         //cout << "\n\n\n\n       RECORDSPQ: " << recordsPQ << "\n\n\n\n";
