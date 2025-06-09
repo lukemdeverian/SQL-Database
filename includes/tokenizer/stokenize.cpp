@@ -85,6 +85,8 @@ STokenizer::STokenizer(char input[]){
     }
     table[1][0] = 1;
     table[1]['.'] = 2;
+    table[3][0] = 1;
+    //table[2][0] = 0;
 
     for(int i = 0; i < 52; i++){
         table[0][ALFA[i]] = 4;

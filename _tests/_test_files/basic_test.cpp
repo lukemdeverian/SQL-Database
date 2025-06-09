@@ -40,6 +40,10 @@ const vector<string> command_list = {
 /*18*/     "select * from student where lname>J",
 /*19*/     "select * from student where lname>J and (major=CS or major=Art)"
 
+
+
+
+
 };
 
 const int MAKE_TABLE_COMMANDS = 11;
@@ -56,12 +60,12 @@ bool sql_basic(bool debug = false)
      for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
      {
           cout << ">" << command_list[i] << endl;
-          sql.command(command_list[i]);
+          //sql.command(command_list[i]);
      }
 
      cout << endl
           << endl;
-     for (int i = MAKE_TABLE_COMMANDS; i < command_list.size(); i++)
+     for (int i = 0; i < command_list.size(); i++)
      {
           cout << "\n>" << command_list[i] << endl;
           if (debug)
