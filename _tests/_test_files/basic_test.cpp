@@ -16,29 +16,43 @@ using namespace std;
 
 const vector<string> command_list = {
 
-/*00*/     "make table employee fields  last,       first,         dep,      salary, year",
-/*01*/     "insert into employee values Blow,       Joe,           CS,       100000, 2018",
-/*02*/     "insert into employee values Blow,       JoAnn,         Physics,  200000, 2016",
-/*03*/     "insert into employee values Johnson,    Jack,          HR,       150000, 2014",
-/*04*/     "insert into employee values Johnson,    \"Jimmy\",     Chemistry,140000, 2018",
+// /*00*/     "make table employee fields  last,       first,         dep,      salary, year",
+// /*01*/     "insert into employee values Blow,       Joe,           CS,       100000, 2018",
+// /*02*/     "insert into employee values Blow,       JoAnn,         Physics,  200000, 2016",
+// /*03*/     "insert into employee values Johnson,    Jack,          HR,       150000, 2014",
+// /*04*/     "insert into employee values Johnson,    \"Jimmy\",     Chemistry,140000, 2018",
 
-/*05*/     "make table student fields  fname,          lname,    major,    age",
-/*06*/     "insert into student values Flo,            Yao, 	Art, 	20",
-/*07*/     "insert into student values Bo, 		     Yang, 	CS, 		28",
-/*08*/     "insert into student values \"Sammuel L.\", Jackson, 	CS, 		40",
-/*09*/     "insert into student values \"Billy\",	     Jackson, 	Math,	27",
-/*10*/     "insert into student values \"Mary Ann\",   Davis,	Math,	30",
+// /*05*/     "make table student fields  fname,          lname,    major,    age",
+// /*06*/     "insert into student values Flo,            Yao, 	Art, 	20",
+// /*07*/     "insert into student values Bo, 		     Yang, 	CS, 		28",
+// /*08*/     "insert into student values \"Sammuel L.\", Jackson, 	CS, 		40",
+// /*09*/     "insert into student values \"Billy\",	     Jackson, 	Math,	27",
+// /*10*/     "insert into student values \"Mary Ann\",   Davis,	Math,	30",
 
-/*11*/     "select * from employee",
-/*12*/     "select last, first, age from employee",
-/*13*/     "select last from employee",
-/*14*/     "select * from employee where last = Johnson",
-/*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
+// /*11*/     "select * from employee",
+// /*12*/     "select last, first, age from employee",
+// /*13*/     "select last from employee",
+// /*14*/     "select * from employee where last = Johnson",
+// /*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
 
-/*16*/     "select * from student",
-/*17*/     "select * from student where (major=CS or major=Art)",
-/*18*/     "select * from student where lname>J",
-/*19*/     "select * from student where lname>J and (major=CS or major=Art)"
+// /*16*/     "select * from student",
+// /*17*/     "select * from student where (major=CS or major=Art)",
+// /*18*/     "select * from student where lname>J",
+// /*19*/     "select * from student where lname>J and (major=CS or major=Art)"
+
+/*00*/     "make table books fields title, author, genre, status",
+/*01*/     "insert into books values Dune, Herbert, SciFi, Available",    //0
+/*02*/     "insert into books values Foundation, Asimov, SciFi, CheckedOut",   //1
+/*03*/     "insert into books values Hamlet, Shakespeare, Drama, Available",  //2
+/*04*/     "insert into books values Macbeth, Shakespeare, Drama, CheckedOut", //3
+/*05*/     "insert into books values 1984, Orwell, Dystopia, Available",   //4
+/*06*/     "insert into books values AnimalFarm, Orwell, Dystopia, CheckedOut", //5
+/*07*/     "insert into books values TheHobbit, Tolkien, Fantasy, Available",   //6
+/*08*/     "insert into books values LOTR, Tolkien, Fantasy, CheckedOut",   //7
+
+/*09*/     "select * from books where (genre=SciFi or genre=Drama or genre=Fantasy) and (status=Available or author=Orwell) and (author=Shakespeare or genre=Dystopia)"
+
+
 
 };
 
@@ -53,11 +67,11 @@ bool sql_basic(bool debug = false)
      sql.command(command_list[0]);
      cout << "basic_test: table created." << endl<<endl;
 
-     for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
-     {
-          cout << ">" << command_list[i] << endl;
-          //sql.command(command_list[i]);
-     }
+     // for (int i = 0; i < MAKE_TABLE_COMMANDS; i++)
+     // {
+     //      cout << ">" << command_list[i] << endl;
+     //      //sql.command(command_list[i]);
+     // }
 
      cout << endl
           << endl;
