@@ -34,7 +34,9 @@ mmap_ss Parser::parse_tree(){
             cout << "Invalid SQL statement.\n"
                 << "state: " << state << "\n"
                 << "col: " << col << "\n";
-            assert(false);
+            //assert(false);
+            _ptree.clear();
+            return _ptree;
         }
 
 

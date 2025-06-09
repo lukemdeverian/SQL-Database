@@ -12,6 +12,10 @@ Table SQL::command(string theCommand){
     Parser p(commandChar);
     _ptree = p.parse_tree();
 
+    if(_ptree.empty()){
+        return Table();
+    }
+
     string cmd = _ptree["command"][0];
     //cout << "cmd: " << cmd << endl;
     if(cmd == "make" || cmd == "create"){
@@ -43,7 +47,8 @@ Table SQL::command(string theCommand){
         }
         
     }
-    assert(false && "invalid SQL command");
+    //assert(false && "invalid SQL command");
+    return Table();
 }
 
 vector<long> SQL::select_recnos(){
