@@ -1563,14 +1563,22 @@ Table Table::select(vector<string> desiredFields, Queue<TokenTable *> postfix){
             TokenStr* LHS = static_cast<TokenStr*>(token_stack.pop());
             string p = LHS->getValue();
             string q = RHS->getValue();
-            //cout << "p: " << p << endl << "q: " << q << endl;
-            record_stack.push(table_to_vector(p, desiredOperator, q));
-            //cout << "after wrong insert!";
+            cout << "\np: " << p << endl << "q: " << q << endl;
+            vector<long> potentialInsert = table_to_vector(p, desiredOperator, q);
+            if(!potentialInsert.empty()){
+                cout << "HELLO IM GAY\n\n\n";
+                record_stack.push(potentialInsert);
+            } else{
+                cout << "after wrong insert!";
+            }
+            
         } else if(popped->getType() == 2){
+            cout << "\ngot here\n";
             Logical* log = static_cast<Logical*>(popped);
             string desiredLogical = log->getValue();
             vector<long> RHS = record_stack.pop();
             vector<long> LHS = record_stack.pop();
+            cout << "\nafter that\n";
             record_stack.push(applyLogical(LHS, RHS, desiredLogical));
         }
         //iterations++;
@@ -1731,11 +1739,14 @@ vector<long> Table::table_to_vector(string p, string op, string q){
     //assert(i != _field_names.size() && "field was not found.");
 
     vector<long> recordsPQ;
+    if(i == _field_names.size()){
+        return recordsPQ;
+    }
 
     if(op == "="){
         if(_indices[i].contains(q)){
             recordsPQ = _indices[i].at(q);
-        }
+        }   cout << "im so confused";
         return recordsPQ;
         //cout << "this is probably the problem!";
         //cout << "\n\n\n\n       RECORDSPQ: " << recordsPQ << "\n\n\n\n";
