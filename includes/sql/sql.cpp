@@ -16,6 +16,8 @@ Table SQL::command(string theCommand){
         return Table();
     }
 
+    _records_selected.clear();
+
     string cmd = _ptree["command"][0];
     //cout << "cmd: " << cmd << endl;
     if(cmd == "make" || cmd == "create"){
