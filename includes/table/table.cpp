@@ -1706,7 +1706,7 @@ Table Table::select(vector<string> desiredFields, vector<string> infix){
         postFix.push(push_me);
     }
 
-    Queue<TokenTable*> test = postFix;
+    // Queue<TokenTable*> test = postFix;
     // cout << "postfix: ";
     // while(!test.empty()){
     //     TokenTable* p = test.pop();
@@ -1718,10 +1718,10 @@ Table Table::select(vector<string> desiredFields, vector<string> infix){
 }
 
 int getPriority(const string& input){
-    // if(input == "and"){
-    //     return 0;
-    // }
-    if(input == "or" || input == "and"){ return 1;}
+    if(input == "or"){
+        return 0;
+    }
+    if(input == "and"){ return 1;}
     if(input == "=" || input == "<" || input == ">" || input == "<=" || input == ">="){return 2;}
     return -1;
 }
