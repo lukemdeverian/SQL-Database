@@ -1526,14 +1526,14 @@ Table Table::select(vector<string> desiredFields, Queue<TokenTable *> postfix){
     Stack<vector<long>> record_stack;
     record_stack = Stack<vector<long>>();
 
-    vector<long> inds;
-    int j = 0;
-    for(int i = 0; i < _num_fields; i++){
-        if(j < desiredFields.size() && _field_names[i] == desiredFields[j]){
-            inds.push_back(i);
-            j++;
-        }
-    }
+    // vector<long> inds;
+    // int j = 0;
+    // for(int i = 0; i < _num_fields; i++){
+    //     if(j < desiredFields.size() && _field_names[i] == desiredFields[j]){
+    //         inds.push_back(i);
+    //         j++;
+    //     }
+    // }
 
     //cout << "INDS: " << inds << endl;
     //int iterations = 0;
@@ -1617,21 +1617,6 @@ Table Table::select(vector<string> desiredFields, vector<string> infix){
     Stack<TokenTable *> converter;
     converter = Stack<TokenTable *>();
 
-    // postFix.push(new TokenStr("age"));
-    // postFix.push(new TokenStr("20"));
-    // postFix.push(new Relational("<"));
-    // postFix.push(new TokenStr("age"));
-    // postFix.push(new TokenStr("17"));
-    // postFix.push(new Relational(">"));
-    // postFix.push(new Logical("and"));
-    // postFix.push(new TokenStr("lname"));
-    // postFix.push(new TokenStr("Gomez"));
-    // postFix.push(new Relational("="));
-    // postFix.push(new Logical("or"));
-
-    //return select(desiredFields, postFix);
-
-
     int parenTracker = 0;
 
     for(int i = 0; i < infix.size(); i++){
@@ -1704,11 +1689,11 @@ Table Table::select(vector<string> desiredFields, vector<string> infix){
     }
 
     Queue<TokenTable*> test = postFix;
-    cout << "postfix: ";
-    while(!test.empty()){
-        TokenTable* p = test.pop();
-        p->print(); cout << " ";
-    } cout << endl;
+    // cout << "postfix: ";
+    // while(!test.empty()){
+    //     TokenTable* p = test.pop();
+    //     p->print(); cout << " ";
+    // } cout << endl;
     
 
     return select(desiredFields, postFix);
@@ -1723,9 +1708,9 @@ int getPriority(const string& input){
 vector<long> Table::table_to_vector(string p, string op, string q){
     // cout << "\n\n\nFIRED TABLE_TO_VECTOR WITH: " << endl;
     // //cout << "DESIREDFIELDS: " << desiredFields << endl;
-    cout << "P: " << p << endl;
-    cout << "OP: " << op << endl;
-    cout << "Q: " << q << endl;
+    // cout << "P: " << p << endl;
+    // cout << "OP: " << op << endl;
+    // cout << "Q: " << q << endl;
     int i = 0;
     while(i < _field_names.size() && p != _field_names[i]){
         i++;
@@ -1774,7 +1759,9 @@ vector<long> Table::table_to_vector(string p, string op, string q){
         //cout << "HELLLLLLOOOOOO" << endl;
         MMap<string, long>::Iterator start = _indices[i].begin();
         MMap<string, long>::Iterator end = _indices[i].lower_bound(q);
-        end++;
+        if(_indices[i].contains(q)){
+            end++;
+        }
         while(start != end){
             for(int i = 0; i < (*start).value_list.size(); i++){
                 recordsPQ.push_back((*start).value_list[i]);
