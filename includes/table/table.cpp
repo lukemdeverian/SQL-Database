@@ -1280,7 +1280,17 @@
 #include "table.h"
 
 Table::Table(){
-
+    _table_name = "blank";
+    _last_record = 0;
+    _num_fields = 0;
+    string textFileName = _table_name  + "_fields.txt";
+    string binFileName = _table_name + ".bin";
+    ofstream f2;
+    f2.open(textFileName.c_str());
+    f2.close();
+    fstream f;
+    open_fileW(f, binFileName.c_str());
+    f.close();
 }
 
 Table::Table(string name, vector<string> fields){
