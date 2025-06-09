@@ -1537,6 +1537,7 @@ Table Table::select(vector<string> desiredFields, Queue<TokenTable *> postfix){
 
     //cout << "INDS: " << inds << endl;
     //int iterations = 0;
+    // cout << "BALLALALALLAALLSSSSS";
     while(!postfix.empty()){
         //cout << "ITERATION: " << iterations << ", ";
         TokenTable* popped = postfix.pop();
@@ -1552,7 +1553,9 @@ Table Table::select(vector<string> desiredFields, Queue<TokenTable *> postfix){
             TokenStr* LHS = static_cast<TokenStr*>(token_stack.pop());
             string p = LHS->getValue();
             string q = RHS->getValue();
+            //cout << "p: " << p << endl << "q: " << q << endl;
             record_stack.push(table_to_vector(p, desiredOperator, q));
+            //cout << "after wrong insert!";
         } else if(popped->getType() == 2){
             Logical* log = static_cast<Logical*>(popped);
             string desiredLogical = log->getValue();
@@ -1700,50 +1703,12 @@ Table Table::select(vector<string> desiredFields, vector<string> infix){
         postFix.push(push_me);
     }
 
-    // 15
-    // Token* test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    //cout << "age 30 > lname Doe = and age 18 > fname Flo = and or";
-    // test = postFix.pop();
-    // test->print(); cout << " ";
-    // cout << "\n\n\n\n";
-    // cout << "tablename: " << _table_name << endl;
-    // cout << "fields: " << _field_names << endl;
-    // Queue<TokenTable*> test = postFix;
-    // cout << "postfix: ";
-    // while(!test.empty()){
-    //     TokenTable* p = test.pop();
-    //     p->print(); cout << " ";
-    //     //cout << *test.pop() << " ";
-    // } cout << endl;
+    Queue<TokenTable*> test = postFix;
+    cout << "postfix: ";
+    while(!test.empty()){
+        TokenTable* p = test.pop();
+        p->print(); cout << " ";
+    } cout << endl;
     
 
     return select(desiredFields, postFix);
@@ -1758,9 +1723,9 @@ int getPriority(const string& input){
 vector<long> Table::table_to_vector(string p, string op, string q){
     // cout << "\n\n\nFIRED TABLE_TO_VECTOR WITH: " << endl;
     // //cout << "DESIREDFIELDS: " << desiredFields << endl;
-    // cout << "P: " << p << endl;
-    // cout << "OP: " << op << endl;
-    // cout << "Q: " << q << endl;
+    cout << "P: " << p << endl;
+    cout << "OP: " << op << endl;
+    cout << "Q: " << q << endl;
     int i = 0;
     while(i < _field_names.size() && p != _field_names[i]){
         i++;
@@ -1770,7 +1735,11 @@ vector<long> Table::table_to_vector(string p, string op, string q){
     vector<long> recordsPQ;
 
     if(op == "="){
-        recordsPQ = _indices[i].at(q);
+        if(_indices[i].contains(q)){
+            recordsPQ = _indices[i].at(q);
+        }
+        return recordsPQ;
+        //cout << "this is probably the problem!";
         //cout << "\n\n\n\n       RECORDSPQ: " << recordsPQ << "\n\n\n\n";
     } else if(op == ">"){
         MMap<string,long>::Iterator start = _indices[i].upper_bound(q);
@@ -1790,7 +1759,10 @@ vector<long> Table::table_to_vector(string p, string op, string q){
             start++;
         }
     } else if(op == ">="){
-        recordsPQ = _indices[i].at(q);
+        if(_indices[i].contains(q)){
+            recordsPQ = _indices[i].at(q);
+        }
+        //recordsPQ = _indices[i].at(q);
         MMap<string,long>::Iterator start = _indices[i].upper_bound(q);
         while(start != _indices[i].end()){
             for(int i = 0; i < (*start).value_list.size(); i++){

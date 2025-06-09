@@ -106,8 +106,9 @@ STokenizer::STokenizer(char input[]){
     //maybe make special case for ...
     for(int i = 0; i < 12; i++){
         table[0][OPERATORS[i]] = 8;
-        table[8][OPERATORS[i]] = 8;
+        //table[8][OPERATORS[i]] = 8;
     }
+    table[8][OPERATORS[2]] = 8;
     table[8][0] = 1;
 
      table[0]['"'] = 11;

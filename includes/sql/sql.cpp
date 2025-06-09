@@ -33,6 +33,7 @@ Table SQL::command(string theCommand){
             vector<string> condition = _ptree["condition"];
             cout << "condition: " << condition << endl;
             Table return_me = _tables[tableName].select(fields, condition);
+            //cout << "DID I CRASH?";
             _records_selected = return_me.select_recnos();
             return return_me;
         } else{
