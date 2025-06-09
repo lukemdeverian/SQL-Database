@@ -9,6 +9,7 @@
 #include <algorithm>
 #include "token.h"
 #include "constants.h"
+#include <assert.h>
 using namespace std;
 
 class STokenizer

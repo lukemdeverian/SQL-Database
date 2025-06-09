@@ -70,7 +70,7 @@ STokenizer::STokenizer(char input[]){
     strcpy(buffer, input);
     //cout << buffer << endl;
     pos = 0;
-    for(int i = 0; i < 10; i++){
+    for(int i = 0; i < 13; i++){
         for(int j = 0; j < 127; j++){
             table[i][j] = -1;
         }
@@ -115,7 +115,7 @@ STokenizer::STokenizer(char input[]){
 
      table[0]['"'] = 11;
 
-    for (int i = 32; i < 127; i++) {
+    for (int i = 0; i < 127; i++) {
         if (i != '"') {
             table[11][i] = 11;
         }
@@ -149,6 +149,10 @@ bool STokenizer::get_token(Token &token){
     // }
 
     while(buffer[pos] != '\0'){
+
+        // if(state == 12){
+        //     assert(false && "\ndebug\n");
+        // }
         //cout << "test\n";
         //cout << "pos: " << pos <<endl;
         //cout << "state: " << state << endl;

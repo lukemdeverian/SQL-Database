@@ -208,35 +208,39 @@ Queue<string> Parser::setInput(char s[]){
         //cout << "DEBUG RAW TOKEN: [" << t.token_str() << "]" << endl;
 
 
-        if(t.token_str().length() != 0 && t.token_str()[0] == '"'){
+        if(t.token_str().length() != 0 && t.token_str()[0] == '"' && t.token_str() != "\"\""){
             string bounds = t.token_str();
+            // cout << "BOUNDS: " << bounds << endl;
+            // cout << "length: " << bounds.length();
+            // cout << "cut it off: " << bounds.substr(1, bounds.length()-2) << endl;
+            return_me.push(bounds.substr(1, bounds.length()-2));
 
-            int end_quote_pos = bounds.find('\"', 1);
-            if (end_quote_pos != string::npos) {
-                end_quote_pos++;
-                string s1 = bounds.substr(0, end_quote_pos);
-                string s2 = bounds.substr(end_quote_pos);
-                // cout << "s1 = [" << s1 << "]\n";
-                // cout << "s2 = [" << s2 << "]\n";
-                return_me.push(s1.substr(1, s1.length()-2));
+            // int end_quote_pos = bounds.find('\"', 1);
+            // if (end_quote_pos != string::npos) {
+            //     end_quote_pos++;
+            //     string s1 = bounds.substr(0, end_quote_pos);
+            //     string s2 = bounds.substr(end_quote_pos);
+            //     // cout << "s1 = [" << s1 << "]\n";
+            //     // cout << "s2 = [" << s2 << "]\n";
+            //     return_me.push(s1.substr(1, s1.length()-2));
 
-                // char recur[300];
-                // strcpy(recur, s2);
+            //     // char recur[300];
+            //     // strcpy(recur, s2);
                 
-                // Queue<string> extra = setInput(s2.c_str());
-                if(s2.length() != 0){
-                    char* recur = new char[s2.length() + 1];
-                    strcpy(recur, s2.c_str());
-                    Queue<string> extra = setInput(recur);
-                    delete[] recur;
-                    while(!extra.empty()){
-                        return_me.push(extra.pop());
-                    }
-                }
+            //     // Queue<string> extra = setInput(s2.c_str());
+            //     if(s2.length() != 0){
+            //         char* recur = new char[s2.length() + 1];
+            //         strcpy(recur, s2.c_str());
+            //         Queue<string> extra = setInput(recur);
+            //         delete[] recur;
+            //         while(!extra.empty()){
+            //             return_me.push(extra.pop());
+            //         }
+            //     }
                 
-            } else {
-                cout << "No closing quote found.\n";
-            }
+            // } else {
+            //     cout << "No closing quote found.\n";
+            // }
         }
         
         else if(t.type_string() != "SPACE" && t.type_string() != "UNKNOWN"){
