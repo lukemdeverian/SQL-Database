@@ -1710,9 +1710,12 @@ Table Table::select(vector<string> desiredFields, vector<string> infix){
 }
 
 int getPriority(const string& input){
-    if(input == "and" || input == "or"){ return 1;}
+    if(input == "and"){
+        return 0;
+    }
+    if(input == "or"){ return 1;}
     if(input == "=" || input == "<" || input == ">" || input == "<=" || input == ">="){return 2;}
-    return 0;
+    return -1;
 }
 
 vector<long> Table::table_to_vector(string p, string op, string q){
