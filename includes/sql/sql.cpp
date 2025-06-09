@@ -31,7 +31,8 @@ Table SQL::command(string theCommand){
         vector<string> fields = _ptree["fields"];
         if(_ptree.contains("condition")){
             vector<string> condition = _ptree["condition"];
-            Table return_me = _tables[tableName].select(fields, condition);  //do for *
+            cout << "condition: " << condition << endl;
+            Table return_me = _tables[tableName].select(fields, condition);
             _records_selected = return_me.select_recnos();
             return return_me;
         } else{

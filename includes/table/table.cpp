@@ -1599,6 +1599,9 @@ Table Table::select(vector<string> desiredFields, Queue<TokenTable *> postfix){
         }
     }
 
+    //cout << "endrecords: " << endRecords << endl;
+    return_me._records_PQ = endRecords;
+
     f.close(); //MIGHT NEED TO SWAP THE INDICE MAPS IN RESPONSE TO A DIFFERENT ORDER IN RESPONSE TO THE DESIRED FIELDS
     return return_me;
 
@@ -1731,7 +1734,16 @@ Table Table::select(vector<string> desiredFields, vector<string> infix){
     //cout << "age 30 > lname Doe = and age 18 > fname Flo = and or";
     // test = postFix.pop();
     // test->print(); cout << " ";
-    //cout << "\n\n\n\n";
+    // cout << "\n\n\n\n";
+    // cout << "tablename: " << _table_name << endl;
+    // cout << "fields: " << _field_names << endl;
+    // Queue<TokenTable*> test = postFix;
+    // cout << "postfix: ";
+    // while(!test.empty()){
+    //     TokenTable* p = test.pop();
+    //     p->print(); cout << " ";
+    //     //cout << *test.pop() << " ";
+    // } cout << endl;
     
 
     return select(desiredFields, postFix);
