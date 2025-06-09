@@ -279,24 +279,31 @@ public:
                                          // key entry or next if does not
                                          // exist: >= entry
     Iterator upper_bound(const T& key){
-        int i = first_ge(data, data_count, key);
+        int i  = first_ge(data, data_count, key);
 
-        if(!is_leaf()){
-            return subset[i]->upper_bound(key);
-        }
-
-        while(i < data_count && data[i] <= key){
-            i++;
-        }
-
-        if(i < data_count){
-            return Iterator(this, i);
-        } else{
-            if(next != nullptr){
-                return Iterator(next, 0);
-            } else{
-                return end();
+        if(is_leaf()){
+            if(data[i] == key){
+                i++;
             }
+
+            if(i < data_count){
+                return Iterator(this, i);
+            } else{
+                if(next){
+                    return Iterator(next, 0);
+                } else{
+                    return Iterator(nullptr, 0);
+                }
+            }
+        }
+
+        if(!is_leaf() && data[i] == key){
+            if(subset[i + 1] == nullptr){
+                return Iterator(nullptr, 0);
+            }
+            return subset[i + 1]->upper_bound(key);
+        } else{
+            return subset[i]->upper_bound(key);
         }
     }  //return first that goes AFTER key
                                          //exist or not, the next entry  >entry

@@ -1706,12 +1706,12 @@ Table Table::select(vector<string> desiredFields, vector<string> infix){
         postFix.push(push_me);
     }
 
-    // Queue<TokenTable*> test = postFix;
-    // cout << "postfix: ";
-    // while(!test.empty()){
-    //     TokenTable* p = test.pop();
-    //     p->print(); cout << " ";
-    // } cout << endl;
+    Queue<TokenTable*> test = postFix;
+    cout << "postfix: ";
+    while(!test.empty()){
+        TokenTable* p = test.pop();
+        p->print(); cout << " ";
+    } cout << endl;
     
 
     return select(desiredFields, postFix);
