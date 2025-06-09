@@ -16,41 +16,41 @@ using namespace std;
 
 const vector<string> command_list = {
 
-// /*00*/     "make table employee fields  last,       first,         dep,      salary, year",
-// /*01*/     "insert into employee values Blow,       Joe,           CS,       100000, 2018",
-// /*02*/     "insert into employee values Blow,       JoAnn,         Physics,  200000, 2016",
-// /*03*/     "insert into employee values Johnson,    Jack,          HR,       150000, 2014",
-// /*04*/     "insert into employee values Johnson,    \"Jimmy\",     Chemistry,140000, 2018",
+/*00*/     "make table employee fields  last,       first,         dep,      salary, year",
+/*01*/     "insert into employee values Blow,       Joe,           CS,       100000, 2018",
+/*02*/     "insert into employee values Blow,       JoAnn,         Physics,  200000, 2016",
+/*03*/     "insert into employee values Johnson,    Jack,          HR,       150000, 2014",
+/*04*/     "insert into employee values Johnson,    \"Jimmy\",     Chemistry,140000, 2018",
 
-// /*05*/     "make table student fields  fname,          lname,    major,    age",
-// /*06*/     "insert into student values Flo,            Yao, 	Art, 	20",
-// /*07*/     "insert into student values Bo, 		     Yang, 	CS, 		28",
-// /*08*/     "insert into student values \"Sammuel L.\", Jackson, 	CS, 		40",
-// /*09*/     "insert into student values \"Billy\",	     Jackson, 	Math,	27",
-// /*10*/     "insert into student values \"Mary Ann\",   Davis,	Math,	30",
+/*05*/     "make table student fields  fname,          lname,    major,    age",
+/*06*/     "insert into student values Flo,            Yao, 	Art, 	20",
+/*07*/     "insert into student values Bo, 		     Yang, 	CS, 		28",
+/*08*/     "insert into student values \"Sammuel L.\", Jackson, 	CS, 		40",
+/*09*/     "insert into student values \"Billy\",	     Jackson, 	Math,	27",
+/*10*/     "insert into student values \"Mary Ann\",   Davis,	Math,	30",
 
-// /*11*/     "select * from employee",
-// /*12*/     "select last, first, age from employee",
-// /*13*/     "select last from employee",
-// /*14*/     "select * from employee where last = Johnson",
-// /*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
+/*11*/     "select * from employee",
+/*12*/     "select last, first, age from employee",
+/*13*/     "select last from employee",
+/*14*/     "select * from employee where last = Johnson",
+/*15*/     "select * from employee where last=Blow and major=\"JoAnn\"",
 
-// /*16*/     "select * from student",
-// /*17*/     "select * from student where (major=CS or major=Art)",
-// /*18*/     "select * from student where lname>J",
-// /*19*/     "select * from student where lname>J and (major=CS or major=Art)"
+/*16*/     "select * from student",
+/*17*/     "select * from student where (major=CS or major=Art)",
+/*18*/     "select * from student where lname>J",
+/*19*/     "select * from student where lname>J and (major=CS or major=Art)"
 
-/*00*/ "make table students fields name,    age,   major,     gpa",
-/*01*/ "insert into students values Alice,   20,    Math,      3.6",  //0
-/*02*/ "insert into students values Bob,     21,    CS,        3.4",  //1
-/*03*/ "insert into students values Carol,   22,    English,   3.8",  //2
-/*04*/ "insert into students values Dave,    23,    CS,        3.9",  //3
-/*05*/ "insert into students values Eve,     24,    Math,      3.1",  //4
-/*06*/ "insert into students values Frank,   25,    History,   3.7",  //5 
-/*07*/ "insert into students values Grace,   26,    CS,        3.3",  //6
+// /*00*/ "make table students fields name,    age,   major,     gpa",
+// /*01*/ "insert into students values Alice,   20,    Math,      3.6",  //0
+// /*02*/ "insert into students values Bob,     21,    CS,        3.4",  //1
+// /*03*/ "insert into students values Carol,   22,    English,   3.8",  //2
+// /*04*/ "insert into students values Dave,    23,    CS,        3.9",  //3
+// /*05*/ "insert into students values Eve,     24,    Math,      3.1",  //4
+// /*06*/ "insert into students values Frank,   25,    History,   3.7",  //5 
+// /*07*/ "insert into students values Grace,   26,    CS,        3.3",  //6
 
-//Complex test: multiple relational expressions, with one invalid clause in the middle
-/*08*/ "select * from students where ((major=Math and gpa>3.0) or (major=CS and gpa>3.5)) and (name=Zoe and gpa>3.5 or age>22)",
+// //Complex test: multiple relational expressions, with one invalid clause in the middle
+// /*08*/ "select * from students where ((major=Math and gpa>3.0) or (major=CS and gpa>3.5)) and (name=Zoe and gpa>3.5 or age>22)",
 
 
 
