@@ -40,17 +40,18 @@ const vector<string> command_list = {
 // /*18*/     "select * from student where lname>J",
 // /*19*/     "select * from student where lname>J and (major=CS or major=Art)"
 
-/*00*/     "make table books fields title, author, genre, status",
-/*01*/     "insert into books values Dune, Herbert, SciFi, Available",    //0
-/*02*/     "insert into books values Foundation, Asimov, SciFi, CheckedOut",   //1
-/*03*/     "insert into books values Hamlet, Shakespeare, Drama, Available",  //2
-/*04*/     "insert into books values Macbeth, Shakespeare, Drama, CheckedOut", //3
-/*05*/     "insert into books values 1984, Orwell, Dystopia, Available",   //4
-/*06*/     "insert into books values AnimalFarm, Orwell, Dystopia, CheckedOut", //5
-/*07*/     "insert into books values TheHobbit, Tolkien, Fantasy, Available",   //6
-/*08*/     "insert into books values LOTR, Tolkien, Fantasy, CheckedOut",   //7
+/*00*/ "make table students fields name,    age,   major,     gpa",
+/*01*/ "insert into students values Alice,   20,    Math,      3.6",  //0
+/*02*/ "insert into students values Bob,     21,    CS,        3.4",  //1
+/*03*/ "insert into students values Carol,   22,    English,   3.8",  //2
+/*04*/ "insert into students values Dave,    23,    CS,        3.9",  //3
+/*05*/ "insert into students values Eve,     24,    Math,      3.1",  //4
+/*06*/ "insert into students values Frank,   25,    History,   3.7",  //5 
+/*07*/ "insert into students values Grace,   26,    CS,        3.3",  //6
 
-/*09*/     "select * from books where (genre=SciFi or genre=Drama or genre=Fantasy) and (status=Available or author=Orwell) and (author=Shakespeare or genre=Dystopia)"
+//Complex test: multiple relational expressions, with one invalid clause in the middle
+/*08*/ "select * from students where ((major=Math and gpa>3.0) or (major=CS and gpa>3.5)) and (name=Zoe and gpa>3.5 or age>22)",
+
 
 
 

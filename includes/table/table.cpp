@@ -1565,12 +1565,12 @@ Table Table::select(vector<string> desiredFields, Queue<TokenTable *> postfix){
             string q = RHS->getValue();
             //cout << "\np: " << p << endl << "q: " << q << endl;
             vector<long> potentialInsert = table_to_vector(p, desiredOperator, q);
-            if(!potentialInsert.empty()){
-                //cout << "HELLO IM GAY\n\n\n";
+            // if(!potentialInsert.empty()){
+            // //     //cout << "HELLO IM GAY\n\n\n";
                 record_stack.push(potentialInsert);
-            } else{
-                cout << "after wrong insert!";
-            }
+            // } else{
+            //     cout << "after wrong insert!";
+            // }
             
         } else if(popped->getType() == 2){
             //cout << "\ngot here\n";
