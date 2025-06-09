@@ -40,6 +40,7 @@ public:
     vector<long> table_to_vector(string p, string op, string q);
     Table vectorToTable(vector<long> desiredRecords, string tName);
     vector<long> select_recnos();
+    vector<string> getFields();
     friend Table operator+(const Table& lhs, const Table& rhs);
     friend ostream &operator <<(ostream& outs, const Table &t);
     

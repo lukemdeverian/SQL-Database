@@ -12,6 +12,9 @@ Table SQL::command(string theCommand){
     Parser p(commandChar);
     _ptree = p.parse_tree();
 
+    // _ptree.print_lookup();
+    // cout << endl;
+
     if(_ptree.empty()){
         return Table();
     }
@@ -28,25 +31,42 @@ Table SQL::command(string theCommand){
     }
     else if(cmd == "insert"){
         string tableName = _ptree["table_name"][0];
-        vector<string> input = _ptree["values"];
-        _tables[tableName].insert_into(input);
-        return _tables[tableName];
+        // vector<string> input = _ptree["values"];
+        // _tables[tableName].insert_into(input);
+        // return _tables[tableName];
+        Table return_me(tableName);
+        return_me.insert_into(_ptree["values"]);
+        return return_me;
     }
     else if(cmd == "select"){
         string tableName = _ptree["table_name"][0];
         vector<string> fields = _ptree["fields"];
-        if(_ptree.contains("condition")){
-            vector<string> condition = _ptree["condition"];
-            cout << "condition: " << condition << endl;
-            Table return_me = _tables[tableName].select(fields, condition);
-            //cout << "DID I CRASH?";
-            _records_selected = return_me.select_recnos();
-            return return_me;
+        // if(_ptree.contains("condition")){
+        //     vector<string> condition = _ptree["condition"];
+        //     cout << "condition: " << condition << endl;
+        //     Table return_me = _tables[tableName].select(fields, condition);
+        //     //cout << "DID I CRASH?";
+        //     _records_selected = return_me.select_recnos();
+        //     return return_me;
+        // } else{
+        //     Table return_me = _tables[tableName].selectAll(fields);
+        //     _records_selected = return_me.select_recnos();
+        //     return return_me;
+        // }
+
+        Table return_me(tableName);
+
+        if(_ptree["fields"][0] == "*"){
+            fields = return_me.getFields();
+        } 
+
+        if(_ptree.contains("where")){
+            return_me.select(fields, _ptree["condition"]);
         } else{
-            Table return_me = _tables[tableName].selectAll(fields);
-            _records_selected = return_me.select_recnos();
-            return return_me;
+            return_me.selectAll(fields);
         }
+        _records_selected = return_me.select_recnos();
+        return return_me;
         
     }
     //assert(false && "invalid SQL command");

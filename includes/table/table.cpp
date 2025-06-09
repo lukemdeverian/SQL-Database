@@ -1902,3 +1902,7 @@ Table Table::selectAll(vector<string> desiredFields){
     }
     return *this;
 }
+
+vector<string> Table::getFields(){
+    return _field_names;
+}
