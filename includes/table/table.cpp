@@ -1371,7 +1371,7 @@ Table::Table(const string& tableName){
 
 void Table::insert_into_no_file_update(const vector<string>& record){
     //cout << _indices[1] << endl;
-    for(int i = 0; i < _num_fields; i++){
+    for(int i = 0; i < _field_names.size(); i++){
         _indices[i].insert(record[i], _last_record);
     }
 }
@@ -1379,7 +1379,7 @@ void Table::insert_into_no_file_update(const vector<string>& record){
 void Table::insert_into(const vector<string>& record){
     //cout << "start of insert_into" << endl;
     
-    for(int i = 0; i < _num_fields; i++){
+    for(int i = 0; i < _field_names.size(); i++){
         if(record[i][0] == '\0'){
             break;
         }
@@ -1425,7 +1425,7 @@ Table Table::select(vector<string> desiredFields, string p, string desiredOperat
         i++;
     }
     //cout << "i: " << i << " num fields: " << _num_fields << "_fields: " << _field_names << endl;
-    assert(i != _field_names.size() && "field was not found.");
+    //assert(i != _field_names.size() && "field was not found.");
 
     vector<long> recordsPQ;
 
@@ -1507,7 +1507,7 @@ Table Table::select(vector<string> desiredFields, Queue<TokenTable *> postfix){
     // cout << "\nFIELD NAMES: " << _field_names << endl;
     // cout << "DESIRED FIELDS: " << desiredFields << endl;
     // cout << "NUM OF FIELDS: " << _num_fields << endl << endl;
-    // string newFileName = "tempPostFix";
+    //string newFileName = "tempPostFix";
     // int c = 1;
     // while(file_exists(newFileName.c_str())){
     //     newFileName = "tempPostFix(" + to_string(c) + ")";
@@ -1516,13 +1516,13 @@ Table Table::select(vector<string> desiredFields, Queue<TokenTable *> postfix){
     string baseName = "tempPostFix";
     string newFileName = baseName;
 
-    newFileName = _table_name;
+    //newFileName = _table_name;
 
-    // int c = 1;
-    // while (file_exists((newFileName + ".bin").c_str())) {
-    //     newFileName = baseName + "(" + to_string(c) + ")";
-    //     c++;
-    // }
+    int c = 1;
+    while (file_exists((newFileName + ".bin").c_str())) {
+        newFileName = baseName + "(" + to_string(c) + ")";
+        c++;
+    }
     //cout << "NEWFILENAME: " << newFileName << endl;
     Table return_me(newFileName, desiredFields);
     
@@ -1799,10 +1799,10 @@ vector<long> Table::select_recnos(){
 ostream &operator<<(ostream &outs, const Table &t){
     outs << "TABLE: " << t._table_name << endl;
     //outs << "num of fields: " << t._num_fields << endl;
-    if(t._num_fields == 0){
+    if(t._field_names.size() == 0){
         return outs;
     } //outs << t._field_names[0];
-    for(int i = 0; i < t._num_fields; i++){
+    for(int i = 0; i < t._field_names.size(); i++){
         outs << setw(25) << t._field_names[i];
     } 
     
