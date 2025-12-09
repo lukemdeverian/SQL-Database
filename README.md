@@ -1,50 +1,30 @@
 
 # Work Report
 
-## Name: <ins> your name goes here </ins>
+## Name: <ins> Luke Deverian </ins>
 
 ## Features:
 
 - Not Implemented:
-  - what features have been implemented
+  - None
 
 <br><br>
 
 - Implemented:
-  - what has been implemented
+  - Inserting, removing, and pulling records of data
 
 <br><br>
 
 - Partly implemented:
-  - what features have not been implemented
+  - printing the table in a desired column order
 
 <br><br>
 
 - Bugs
-  - Known bugs
+  - No known bugs
 
 <br><br>
 
 # Reflections:
 
-- Any thoughts you may have and would like to share.
-
-# **output**
-<pre>
-<br/><br/><br/><br/>
-## Delete this line and paste the output of your basic test and then testB here
-</pre>
-
-
-<br/><br/>
-
-# basic_test.cpp output:
-<pre>
-<br/><br/><br/><br/>
-</pre>
-# testB.cpp output:
-<pre>
-<br/><br/><br/><br/>
-</pre>
-
-
+- I really enjoyed working on this project, it was a great way to end my data structures class. I know that SQL is a fantastic tool for databases, so it was an amazing experience to implement my one.
