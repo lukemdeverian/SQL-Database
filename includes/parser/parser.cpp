@@ -13,32 +13,26 @@ Parser::Parser(char s[]){
 
 mmap_ss Parser::parse_tree(){
     _ptree.clear();
-    string condition = "";
     bool where_present = false;
     int state = 0;
 
     while(!tokenized.empty()){
         string token = tokenized.pop();
-        //cout << "token: " << token << endl;
         int col;
         if(keywords.contains(token)){
             col = keywords[token];
         } else{
             col = keywords["symbol"];
         }
-        //cout << "\nthe state: " << state << "\nthe col: " << col << endl; 
 
         int nextState = _ptable[state][col];
-        //assert(nextState != -1 && "Invalid SQL statement.\n" && "state: " && state && "\ncol: " col && "\n");
         if (nextState == -1) {
             cout << "Invalid SQL statement.\n"
-                << "state: " << state << "\n"
-                << "col: " << col << "\n";
-            //assert(false);
+                 << "state: " << state << "\n"
+                 << "col: " << col << "\n";
             _ptree.clear();
             return _ptree;
         }
-
 
         //COMMAND = MAKE
         if(state == 0){
@@ -63,45 +57,30 @@ mmap_ss Parser::parse_tree(){
             _ptree.insert("table_name", token);
         } else if(state == 34 && col == keywords["where"]){
             where_present = true;
-        } 
-        // else if(state == 35 && col == keywords["symbol"]){
-        //     if(!condition.empty()) condition += " ";
-        //     condition += token;
-        // } else if(state == 36 && col == keywords["="]){
-        //     condition += " =";
-        // } else if(state == 37 && col == keywords["symbol"]){
-        //     condition += " " + token;
-        // } else if(state == 38 && col == keywords["and"]){
-        //     condition += " and";
-        // }
-
-
-        // else if(state >= 35){
-        //     if(!condition.empty()){
-        //         condition += " ";
-        //     }
-        //     condition += token;
-        // }
-
-        else if(state >= 35){
+        } else if(state >= 35 && state <= 38){
             _ptree.insert("condition", token);
         }
 
-        // cout << "condition: " << condition << endl;
-        state = nextState;
-        
-    }
+        //COMMAND = UPDATE
+        else if(state == 40 && col == keywords["symbol"]){
+            _ptree.insert("table_name", token);
+        } else if(state == 42 && col == keywords["symbol"]){
+            _ptree.insert("update_field", token);
+        } else if(state == 44 && col == keywords["symbol"]){
+            _ptree.insert("update_value", token);
+        } else if(state == 45 && col == keywords["where"]){
+            where_present = true;
+        } else if(state >= 46){
+            _ptree.insert("condition", token);
+        }
 
-    // if(where_present || !condition.empty()){
-    //     _ptree.insert("where", "yes");
-    //     _ptree.insert("condition", condition);
-    // }
+        state = nextState;
+    }
 
     if(where_present){
         _ptree.insert("where", "yes");
-        //_ptree.insert("condition", condition);
     }
-    
+
     return _ptree;
 }
 
@@ -115,55 +94,104 @@ void Parser::make_ptable(){
     //COMMAND = MAKE
     _ptable[0][keywords["make"]] = 10;
     _ptable[10][keywords["table"]] = 11;
-    _ptable[11][keywords["symbol"]] = 12; // table name
+    _ptable[11][keywords["symbol"]] = 12;
     _ptable[12][keywords["fields"]] = 13;
     _ptable[13][keywords["symbol"]] = 14;
     _ptable[14][keywords[","]] = 13;
     _ptable[14][0] = 1;
-    _ptable[13][0] = 1; 
+    _ptable[13][0] = 1;
 
     //COMMAND = INSERT
     _ptable[0][keywords["insert"]] = 20;
     _ptable[20][keywords["into"]] = 21;
-    _ptable[21][keywords["symbol"]] = 22;     // table name
+    _ptable[21][keywords["symbol"]] = 22;
     _ptable[22][keywords["values"]] = 23;
     _ptable[23][keywords["symbol"]] = 24;
-    _ptable[24][keywords[","]] = 23;          // more values
-    _ptable[24][0] = 1;                        // accept
-    _ptable[23][0] = 1;                        // accept after single value
-
+    _ptable[24][keywords[","]] = 23;
+    _ptable[24][0] = 1;
+    _ptable[23][0] = 1;
 
     //COMMAND = SELECT
     _ptable[0][keywords["select"]] = 30;
     _ptable[30][keywords["*"]] = 31;
     _ptable[30][keywords["symbol"]] = 32;
-    _ptable[32][keywords[","]] = 30;        // select multiple fields
+    _ptable[32][keywords[","]] = 30;
     _ptable[31][keywords["from"]] = 33;
     _ptable[32][keywords["from"]] = 33;
-    _ptable[33][keywords["symbol"]] = 34;   // table name
+    _ptable[33][keywords["symbol"]] = 34;
     _ptable[34][keywords["where"]] = 35;
-    _ptable[35][keywords["symbol"]] = 36;
-    _ptable[35][keywords["symbol"]] = 36;
-    _ptable[35][keywords["("]] = 35;
-    _ptable[35][keywords[")"]] = 35;
-    _ptable[35][keywords[">="]] = 35;
-    _ptable[35][keywords["="]] = 35;
-    _ptable[35][keywords["and"]] = 35;
-    _ptable[35][keywords["or"]] = 35;
-    _ptable[36][keywords["="]] = 37;
-    _ptable[36][keywords["="]] = 35;
-    _ptable[36][keywords[">="]] = 35;
-    _ptable[36][keywords["and"]] = 35;
-    _ptable[36][keywords["or"]] = 35;
-    _ptable[36][keywords["("]] = 35;
-    _ptable[36][keywords[")"]] = 35;
-    _ptable[36][keywords["symbol"]] = 35;
-    _ptable[37][keywords["symbol"]] = 38;
-    _ptable[38][keywords["and"]] = 35; 
-
     _ptable[34][0] = 1;
-    _ptable[38][0] = 1;
 
+    // WHERE clause for SELECT
+    _ptable[35][keywords["symbol"]] = 36;
+    _ptable[35][keywords["("]]      = 35;
+    _ptable[35][keywords[")"]]      = 35;
+    _ptable[35][keywords["="]]      = 35;
+    _ptable[35][keywords[">="]]     = 35;
+    _ptable[35][keywords["<="]]     = 35;
+    _ptable[35][keywords[">"]]      = 35;
+    _ptable[35][keywords["<"]]      = 35;
+    _ptable[35][keywords["and"]]    = 35;
+    _ptable[35][keywords["or"]]     = 35;
+    _ptable[35][0]                  = 1;
+
+    _ptable[36][keywords["="]]      = 37;   // field = value (key transition)
+    _ptable[36][keywords[">="]]     = 35;
+    _ptable[36][keywords["<="]]     = 35;
+    _ptable[36][keywords[">"]]      = 35;
+    _ptable[36][keywords["<"]]      = 35;
+    _ptable[36][keywords["and"]]    = 35;
+    _ptable[36][keywords["or"]]     = 35;
+    _ptable[36][keywords["("]]      = 35;
+    _ptable[36][keywords[")"]]      = 35;
+    _ptable[36][keywords["symbol"]] = 35;
+
+    _ptable[37][keywords["symbol"]] = 38;
+    _ptable[38][keywords["and"]]    = 35;
+    _ptable[38][keywords["or"]]     = 35;
+    _ptable[38][keywords[")"]]      = 35;
+    _ptable[38][0]                  = 1;
+
+    //COMMAND = UPDATE
+    // UPDATE table SET field = value [, field = value] [WHERE condition]
+    _ptable[0][keywords["update"]]  = 40;
+    _ptable[40][keywords["symbol"]] = 41;   // table name
+    _ptable[41][keywords["set"]]    = 42;
+    _ptable[42][keywords["symbol"]] = 43;   // field name
+    _ptable[43][keywords["="]]      = 44;
+    _ptable[44][keywords["symbol"]] = 45;   // new value
+    _ptable[45][keywords[","]]      = 42;   // another SET pair
+    _ptable[45][keywords["where"]]  = 46;
+    _ptable[45][0]                  = 1;    // accept: no WHERE
+
+    // WHERE clause for UPDATE
+    _ptable[46][keywords["symbol"]] = 47;
+    _ptable[46][keywords["("]]      = 46;
+    _ptable[46][keywords[")"]]      = 46;
+    _ptable[46][keywords["="]]      = 46;
+    _ptable[46][keywords[">="]]     = 46;
+    _ptable[46][keywords["<="]]     = 46;
+    _ptable[46][keywords[">"]]      = 46;
+    _ptable[46][keywords["<"]]      = 46;
+    _ptable[46][keywords["and"]]    = 46;
+    _ptable[46][keywords["or"]]     = 46;
+    _ptable[46][0]                  = 1;
+
+    _ptable[47][keywords["="]]      = 48;
+    _ptable[47][keywords[">="]]     = 46;
+    _ptable[47][keywords["<="]]     = 46;
+    _ptable[47][keywords[">"]]      = 46;
+    _ptable[47][keywords["<"]]      = 46;
+    _ptable[47][keywords["and"]]    = 46;
+    _ptable[47][keywords["or"]]     = 46;
+    _ptable[47][keywords["("]]      = 46;
+    _ptable[47][keywords[")"]]      = 46;
+    _ptable[47][keywords["symbol"]] = 46;
+
+    _ptable[48][keywords["symbol"]] = 49;
+    _ptable[49][keywords["and"]]    = 46;
+    _ptable[49][keywords["or"]]     = 46;
+    _ptable[49][0]                  = 1;
 }
 
 void Parser::makeKeywordsMap()
@@ -189,6 +217,11 @@ void Parser::makeKeywordsMap()
     keywords.insert("(", 16);
     keywords.insert(")", 17);
     keywords.insert(">=", 18);
+    keywords.insert("<", 19);
+    keywords.insert("<=", 20);
+    keywords.insert(">", 21);
+    keywords.insert("update", 22);
+    keywords.insert("set", 23);
 }
 
 Queue<string> Parser::setInput(char s[]){
@@ -199,68 +232,18 @@ Queue<string> Parser::setInput(char s[]){
 
     while(!stk.done()){
         stk >> t;
-        // if(t.token_str() == "\""){
-        //     cout << "HELLLLOOOOOO" << endl;
-        // }
-        //cout << "TOKEN: " << t << ": LENGTH: " << t.token_str().length() << endl;
-        // cout << "TYPE: " << t.type() << ", " << t.type_string() << endl;
-        //cout << endl;
-        //cout << "DEBUG RAW TOKEN: [" << t.token_str() << "]" << endl;
-
 
         if(t.token_str().length() != 0 && t.token_str()[0] == '"' && t.token_str() != "\"\""){
             string bounds = t.token_str();
-            // cout << "BOUNDS: " << bounds << endl;
-            // cout << "length: " << bounds.length();
-            // cout << "cut it off: " << bounds.substr(1, bounds.length()-2) << endl;
             return_me.push(bounds.substr(1, bounds.length()-2));
-
-            // int end_quote_pos = bounds.find('\"', 1);
-            // if (end_quote_pos != string::npos) {
-            //     end_quote_pos++;
-            //     string s1 = bounds.substr(0, end_quote_pos);
-            //     string s2 = bounds.substr(end_quote_pos);
-            //     // cout << "s1 = [" << s1 << "]\n";
-            //     // cout << "s2 = [" << s2 << "]\n";
-            //     return_me.push(s1.substr(1, s1.length()-2));
-
-            //     // char recur[300];
-            //     // strcpy(recur, s2);
-                
-            //     // Queue<string> extra = setInput(s2.c_str());
-            //     if(s2.length() != 0){
-            //         char* recur = new char[s2.length() + 1];
-            //         strcpy(recur, s2.c_str());
-            //         Queue<string> extra = setInput(recur);
-            //         delete[] recur;
-            //         while(!extra.empty()){
-            //             return_me.push(extra.pop());
-            //         }
-            //     }
-                
-            // } else {
-            //     cout << "No closing quote found.\n";
-            // }
         }
-        
         else if(t.type_string() != "SPACE" && t.type_string() != "UNKNOWN"){
             return_me.push(t.token_str());
         }
     }
-
-    // Queue<string> debug = return_me;
-    // while(!debug.empty()){
-    //     cout << debug.pop() << "_";
-    // }
     return return_me;
 }
 
 void Parser::set_string(char s[]){
     tokenized = setInput(s);
-    //cout << "\n\n\n";
-
-    // Queue<string> test = tokenized;
-    // while(!test.empty()){
-    //     cout << test.pop() << "_";
-    // } cout << endl;
 }

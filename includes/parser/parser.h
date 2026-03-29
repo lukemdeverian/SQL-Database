@@ -16,8 +16,8 @@
 #include "../stack/MyStack.h"
 #include "../tokenizer/stokenize.h"
 
-const int MAX_PROWS = 40;
-const int MAX_PCOLS = 40;
+const int MAX_PROWS = 60;
+const int MAX_PCOLS = 30;
 
 
 using namespace std;

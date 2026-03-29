@@ -470,8 +470,10 @@ private:
                 attach_item(data, data_count, bringMeUp);
             }
             if(subset[i]->is_leaf()){
-                // NO insert_item here! split() already correctly distributed elements
-                // bringMeUp was already moved to insertMe by split()
+                // B+ tree rule: leaf nodes must retain ALL data values.
+                // bringMeUp was detached from subset[i] by split(), but it belongs
+                // in insertMe (the right sibling). Re-insert it so no data is lost.
+                ordered_insert(insertMe->data, insertMe->data_count, bringMeUp);
                 insertMe->next = subset[i]->next;
                 subset[i]->next = insertMe;
             }

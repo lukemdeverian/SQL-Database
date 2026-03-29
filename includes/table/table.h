@@ -28,7 +28,6 @@ class Table
 {
 public:
     Table();
-        //_field_names = field_names;
     Table(string name, vector<string> fields);
     Table(const string& tableName);
     void insert_into(const vector<string>& record);
@@ -37,6 +36,9 @@ public:
     Table select(vector<string> desiredFields, Queue<TokenTable*> postfix);
     Table select(vector<string> desiredFields, vector<string> infix);
     Table selectAll(vector<string> desiredFields);
+    void update(string field, string value, vector<string> condition);
+    void updateAll(string field, string value);
+    void rebuild_index(int fieldIndex);
     vector<long> table_to_vector(string p, string op, string q);
     Table vectorToTable(vector<long> desiredRecords, string tName);
     vector<long> select_recnos();
@@ -44,19 +46,13 @@ public:
     friend Table operator+(const Table& lhs, const Table& rhs);
     friend ostream &operator <<(ostream& outs, const Table &t);
     
-    //~Table();
-
-//Table select(vector search, vector wanted)
-
 private:
-    //vector<string> _field_names;
     string _table_name;
     vector<string> _field_names;
     vector<long> _records_PQ;
     int _num_fields;
     vector<MMap<string, long>> _indices;
     long _last_record;
-    //fstream f;
 
 };
 

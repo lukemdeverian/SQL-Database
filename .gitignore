@@ -86,3 +86,7 @@ build/other/
 # SQL output files
 *.txt
 *.bin
+
+# Test scratch files
+debug_tree.cpp
+test_btree_remove.cpp

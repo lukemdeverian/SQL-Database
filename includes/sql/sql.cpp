@@ -58,7 +58,7 @@ Table SQL::command(string theCommand){
 
         if(_ptree["fields"][0] == "*"){
             fields = return_me.getFields();
-        } 
+        }
 
         if(_ptree.contains("where")){
             return_me.select(fields, _ptree["condition"]);
@@ -67,7 +67,20 @@ Table SQL::command(string theCommand){
         }
         _records_selected = return_me.select_recnos();
         return return_me;
-        
+
+    }
+    else if(cmd == "update"){
+        string tableName = _ptree["table_name"][0];
+        string updateField = _ptree["update_field"][0];
+        string updateValue = _ptree["update_value"][0];
+        Table return_me(tableName);
+        if(_ptree.contains("where")){
+            return_me.update(updateField, updateValue, _ptree["condition"]);
+        } else{
+            return_me.updateAll(updateField, updateValue);
+        }
+        _records_selected = return_me.select_recnos();
+        return return_me;
     }
     //assert(false && "invalid SQL command");
     return Table();
