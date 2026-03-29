@@ -29,20 +29,14 @@ public:
 
     FileRecord(char str[][MAX+1])
     {
-        //strncpy(_record, str, MAX);
         for(int i = 0; i < MAX + 1; i++){
             strncpy(_record[i], str[i], MAX);
         }
     }
     FileRecord(vector<string> v){
-        //cout << "before: " << v[0] << endl;
         for(int i = 0; i < v.size(); i++){
-            // cout << "string length: " << v[i].length() << endl;
-            //_record[i][j] = v[i].at(j);
             strncpy(_record[i], v[i].c_str(), MAX);
-            //strncpy(_record[i], v[i].c_str(), MAX);
-        } //cout << "string after filerecord: " << v[0] << endl;
-        //cout << "after: " << _record[0] << endl;
+        }
     }
 
     FileRecord(string s){

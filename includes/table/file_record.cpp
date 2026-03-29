@@ -11,10 +11,6 @@ long FileRecord::write(fstream &outs)
 
     long pos = outs.tellp();    //retrieves the current position of the
                                 //      file pointer
-
-    //outs.write(&record[0], sizeof(record));
-    // outs.write(_record, sizeof(_record));
-    //for(int i = 0; i < )
     outs.write(&_record[0][0], sizeof(_record));
 
     return pos/sizeof(_record);  //record number
@@ -22,22 +18,11 @@ long FileRecord::write(fstream &outs)
 
 long FileRecord::read(fstream &ins, long recno){
     //returns the number of bytes read.
-    //    r.read(f, 6);
-    //    cout<<r<<endl;
     long pos= recno * sizeof(_record);
     ins.seekg(pos, ios_base::beg);
 
-    //ins.read(&_record[0], sizeof(_record))
-    //ins.read(_record, sizeof(_record));
     memset(_record, 0, sizeof(_record));
     ins.read(&_record[0][0], sizeof(_record));
-    //don't you want to mark the end of  the cstring with null?
-    //_record[] => [zero'\0'trash trash trash trash]
-    //don't need the null character, but for those of us with OCD and PTSD:
-    // _record[ins.gcount()] = '\0';
-
-    //((char*)_record)[ins.gcount()] = '\0';
-
 
     if (ins.gcount() < sizeof(_record)) {
         size_t row = ins.gcount() / (MAX+1);
@@ -50,19 +35,15 @@ long FileRecord::read(fstream &ins, long recno){
 }
 ostream& operator<<(ostream& outs,
                     const FileRecord& r){
-    //outs<<r._record;
-    // outs << "lets see:" << r._record[0] << endl;
     for(int i = 0; i < MAX + 1; i++){
 
         if(r._record[i][0] == '\0'){
-            //cout << "HELLO";
             return outs;
         } else{
             if(static_cast<int>(r._record[i][0]) < 0 || static_cast<int>(r._record[i][0]) > 127){
                 return outs;
             }
             outs << setw(25) << r._record[i];
-            //cout << "ascii: " << static_cast<int>(r._record[i][0]);
         }
     } return outs;
 }
@@ -125,8 +106,3 @@ void open_fileW(fstream& f, const char filename[]){
     }
 
 }
-
-// ostream &operator<<(ostream &outs, const FileRecord &r){
-//     outs << r.my_to_string();
-//     return outs;
-// }

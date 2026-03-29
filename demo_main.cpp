@@ -12,16 +12,7 @@ using namespace std::chrono;
 // Helper: pull field names and all rows out of a Table for logging
 void extract_table(Table& t, vector<string>& fields, vector<vector<string>>& rows) {
     fields = t.getFields();
-    // Table's operator<< reads the .bin file — we replicate that logic here
-    // by reading records via the select_recnos pattern.
-    // Simplest approach: re-open the bin file directly.
-    // Since Table doesn't expose a row-iterator, we use a fresh Table load.
-    // (This is a known limitation we can improve later.)
     rows.clear();
-    // We'll populate rows from the table's operator<< output by string parsing —
-    // but that's fragile. Instead, expose a method or just leave rows empty
-    // and rely on the HTML showing "see query output". 
-    // For now, this is a placeholder — see note below.
 }
 
 // ---- Demo queries ----
@@ -65,17 +56,11 @@ int main() {
 
         // Build rows by re-loading from disk using the record numbers
         vector<vector<string>> rows;
-        // We read the bin file for this table using a fresh Table object
-        // and the record numbers returned by select_recnos.
-        // Since Table doesn't expose a get_row(recno) method yet,
-        // we use a simple workaround: load a fresh Table and iterate all records,
-        // keeping only those whose index is in recnos.
-        // For INSERT/MAKE commands, recnos is empty so rows stays empty.
         if (!fields.empty() && !recnos.empty()) {
             string tableName = "";
             // Extract table name from command
             // "select ... from TABLE" or "update TABLE ..."
-            // Simple parse: find "from" or second word for update
+            // Find "from" or second word for update
             istringstream iss(cmd);
             string word;
             vector<string> words;

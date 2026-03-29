@@ -66,7 +66,6 @@ void Token::removeEnd()
 
 ostream &operator<<(ostream &outs, const Token &t)
 {
-    // TODO: insert return statement here
     outs << t.token_str();
     return outs;
 }

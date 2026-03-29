@@ -193,15 +193,7 @@ using namespace std;
             return _insert_head(head, insert_this);
         }
 
-        /*if(head == before_this){
-            return _insert_head(head, insert_this);
-        }*/
-
         node<ITEM_TYPE>* previous_Node = _previous_node<ITEM_TYPE>(head, before_this); //get the previous node
-
-        // if(previous_Node == nullptr){
-        //     return nullptr;
-        // }
 
         return _insert_after<ITEM_TYPE>(head, previous_Node, insert_this);  //call insert_after but with the previous node
     }

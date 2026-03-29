@@ -88,9 +88,6 @@ public:
     Iterator insert_head(ITEM_TYPE i){
         _size++;
         return _insert_head(_head_ptr, i);
-        // return Iterator(_insert_head(_head_ptr, i));
-        // Iterator return_me(_insert_head(_head_ptr, i));
-        // return return_me;
     }                           //insert at the head of list
     void push(ITEM_TYPE i){
         _size++;
@@ -103,8 +100,6 @@ public:
     Iterator insert_after(ITEM_TYPE i, Iterator iMarker){
         _size++;
         return _insert_after(_head_ptr, iMarker._ptr, i);
-        // Iterator return_me(_insert_after(_head_ptr, iMarker._ptr, i));
-        // return return_me;
     }    //insert after marker
     Iterator insert_before(ITEM_TYPE i, Iterator iMarker){
         _size++;
