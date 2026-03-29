@@ -1,6 +1,6 @@
 # SQL Engine
 
-A relational database engine built from scratch in C++. Supports a subset of SQL with file-backed persistent storage, B+ tree indexing, and a boolean expression evaluator for WHERE clauses. All underlying data structures — including the B+ tree, multimap, stack, and queue — are implemented from scratch without relying on the C++ STL containers. The STL is 
+A relational database engine built from scratch in C++. Supports a subset of SQL with file-backed persistent storage, B+ tree indexing, and a boolean expression evaluator for WHERE clauses. All underlying data structures (including the B+ tree, multimap, stack, and queue) are implemented from scratch without relying on the C++ STL containers. The STL is 
 used only for `std::string`, `std::vector`, and `std::fstream`.
 
 Built by **Luke Deverian** as a final project for Data Structures.
