@@ -74,11 +74,6 @@ void insert_item(T data[ ], int i, int& n, T entry){
 
 template <class T>
 void detach_item(T data[ ], int& n, T& entry){
-    // data[n-1] = entry;
-    // n--;
-    if(n < 0){
-        cout << "TERRIBLE DETACH ITEM!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-    }
     n--;
     entry = data[n];
 }          //remove the last element in data and place
@@ -105,45 +100,12 @@ void merge(T data1[ ], int& n1, T data2[ ], int& n2){
 
 template <class T>
 void split(T data1[ ], int& n1, T data2[ ], int& n2){
-    // if(n1 % 2 != 0){
-    //     cout << "ODD\n";
-    // } else {
-    //     cout << "EVEN\n";
-    // }
-    //cout << "BEFORE N1: " << n1 << endl;
-
-    // int iterations = n1/2;
-    // int j = 0;
-    // if(iterations % 2 == 0){
-    //     for(int i = iterations; i < n1; i++){
-    //         data2[j] = data1[i];
-    //         j++;
-    //     }
-    //     n2 = j;
-    //     n1 = iterations;
-    // }
-    // else{
-    //     for(int i = iterations + 1; i < n1; i++){
-    //         data2[j++] = data1[i];
-    //     }
-    //     n2 = j;
-    //     n1 = iterations + 1;
-    // }
-
     n2 = n1/2;
     for(int i = n1-n2; i < n1; i++){
         data2[i - (n1-n2)] = data1[i];
     }
     n1 = n1-n2;
-}
-
-
-
-
-    
-
-    //cout << "N1 + N2: " << n1 + n2 << endl;
-    
+}    
    //move n/2 elements from the right of data1
                                                         //and move to data2
 

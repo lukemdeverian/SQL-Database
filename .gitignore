@@ -82,3 +82,7 @@ googletest/
 .vs
 out/
 build/other/
+
+# SQL output files
+*.txt
+*.bin

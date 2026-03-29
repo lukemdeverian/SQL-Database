@@ -1,5 +1,0 @@
-title
-genre
-rating
-director
-year
