@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Engine Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:        #0a0a0f;
+    --surface:   #11111a;
+    --surface2:  #1a1a28;
+    --border:    #2a2a40;
+    --accent:    #7b6ff0;
+    --accent2:   #4fc3f7;
+    --green:     #4ade80;
+    --orange:    #fb923c;
+    --red:       #f87171;
+    --yellow:    #fbbf24;
+    --text:      #e2e2f0;
+    --muted:     #6b6b90;
+    --mono:      'JetBrains Mono', monospace;
+    --sans:      'Syne', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    min-height: 100vh;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -20%, rgba(123,111,240,0.15), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(79,195,247,0.08), transparent);
+  }
+
+  header {
+    padding: 60px 24px 48px;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 50%;
+    transform: translateX(-50%);
+    width: 120px; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  }
+
+  .logo {
+    font-family: var(--sans);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    letter-spacing: -2px;
+    margin-bottom: 12px;
+  }
+  .logo-bracket { color: var(--accent); opacity: 0.6; }
+  .logo-text    { color: var(--text); }
+  .logo-accent  { color: var(--accent); }
+
+  .subtitle {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+
+  .header-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+  }
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+  }
+
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(16px);
+    animation: rise 0.5s ease forwards;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--accent); }
+
+  @keyframes rise {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+  .card-left { display: flex; align-items: center; gap: 10px; }
+
+  .query-num {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+  }
+
+  .badge {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .badge-select { background: rgba(79,195,247,0.15); color: var(--accent2); }
+  .badge-make   { background: rgba(74,222,128,0.15); color: var(--green);   }
+  .badge-insert { background: rgba(251,191,36,0.15);  color: var(--yellow); }
+  .badge-update { background: rgba(251,146,60,0.15);  color: var(--orange); }
+  .badge-delete { background: rgba(248,113,113,0.15); color: var(--red);    }
+
+  .timing {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--muted);
+  }
+
+  .sql-block {
+    font-family: var(--mono);
+    font-size: 0.88rem;
+    padding: 16px 20px;
+    color: var(--text);
+    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid var(--border);
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+  .prompt { color: var(--accent); margin-right: 8px; font-weight: 700; }
+
+  .table-wrap {
+    overflow-x: auto;
+    padding: 16px 20px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 0.82rem;
+  }
+  thead tr { border-bottom: 1px solid var(--border); }
+  th {
+    text-align: left;
+    padding: 8px 16px 10px;
+    color: var(--accent);
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  td {
+    padding: 9px 16px;
+    color: var(--text);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover td { background: rgba(123,111,240,0.06); }
+
+  .no-rows {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+    padding: 16px 20px;
+    font-style: italic;
+  }
+
+  .recnos {
+    padding: 10px 20px;
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface2);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .recnos-label { color: var(--muted); }
+  .recnos-val   { color: var(--green); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">
+      <span class="logo-bracket">{</span>
+      <span class="logo-text">SQL<span class="logo-accent">Engine</span></span>
+      <span class="logo-bracket">}</span>
+    </div>
+    <p class="subtitle">Custom C++ Database Engine &mdash; Query Execution Demo</p>
+    <div class="header-tags">
+      <span class="tag">B+ Tree Indexing</span>
+      <span class="tag">CREATE</span>
+      <span class="tag">INSERT</span>
+      <span class="tag">SELECT</span>
+      <span class="tag">UPDATE</span>
+    </div>
+  </div>
+</header>
+<main>
+<div class='card' style='animation-delay:0.08s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#1</span>
+      <span class='badge badge-make'>CREATE</span>
+    </div>
+    <span class='timing'>2.86 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> make table employee fields last, first, dep, salary, year</div>
+  <div class='no-rows'>No rows returned</div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[none]</span></div>
+</div>
+<div class='card' style='animation-delay:0.16s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#2</span>
+      <span class='badge badge-insert'>INSERT</span>
+    </div>
+    <span class='timing'>73.62 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> insert into employee values Blow, Joe, CS, 100000, 2018</div>
+  <div class='no-rows'>No rows returned</div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[none]</span></div>
+</div>
+<div class='card' style='animation-delay:0.24s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#3</span>
+      <span class='badge badge-insert'>INSERT</span>
+    </div>
+    <span class='timing'>125.97 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> insert into employee values Blow, JoAnn, Physics, 200000, 2016</div>
+  <div class='no-rows'>No rows returned</div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[none]</span></div>
+</div>
+<div class='card' style='animation-delay:0.32s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#4</span>
+      <span class='badge badge-insert'>INSERT</span>
+    </div>
+    <span class='timing'>116.38 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> insert into employee values Johnson, Jack, HR, 150000, 2014</div>
+  <div class='no-rows'>No rows returned</div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[none]</span></div>
+</div>
+<div class='card' style='animation-delay:0.4s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#5</span>
+      <span class='badge badge-insert'>INSERT</span>
+    </div>
+    <span class='timing'>105.30 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> insert into employee values Johnson, Jimmy, Chemistry, 140000, 2018</div>
+  <div class='no-rows'>No rows returned</div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[none]</span></div>
+</div>
+<div class='card' style='animation-delay:0.48s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#6</span>
+      <span class='badge badge-select'>SELECT</span>
+    </div>
+    <span class='timing'>121.84 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> select * from employee</div>
+  <div class='table-wrap'>
+    <table>
+<thead><tr>
+      <th>last</th>
+      <th>first</th>
+      <th>dep</th>
+      <th>salary</th>
+      <th>year</th>
+    </tr></thead>
+<tbody>
+    <tr><td>Blow</td><td>Joe</td><td>CS</td><td>100000</td><td>2018</td></tr>
+    <tr><td>Blow</td><td>JoAnn</td><td>Physics</td><td>200000</td><td>2016</td></tr>
+    <tr><td>Johnson</td><td>Jack</td><td>HR</td><td>150000</td><td>2014</td></tr>
+    <tr><td>Johnson</td><td>Jimmy</td><td>Chemistry</td><td>140000</td><td>2018</td></tr>
+    </tbody></table>
+  </div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[0, 1, 2, 3]</span></div>
+</div>
+<div class='card' style='animation-delay:0.56s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#7</span>
+      <span class='badge badge-select'>SELECT</span>
+    </div>
+    <span class='timing'>100.52 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> select * from employee where last = Johnson</div>
+  <div class='table-wrap'>
+    <table>
+<thead><tr>
+      <th>last</th>
+      <th>first</th>
+      <th>dep</th>
+      <th>salary</th>
+      <th>year</th>
+    </tr></thead>
+<tbody>
+    <tr><td>Johnson</td><td>Jack</td><td>HR</td><td>150000</td><td>2014</td></tr>
+    <tr><td>Johnson</td><td>Jimmy</td><td>Chemistry</td><td>140000</td><td>2018</td></tr>
+    </tbody></table>
+  </div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[2, 3]</span></div>
+</div>
+<div class='card' style='animation-delay:0.64s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#8</span>
+      <span class='badge badge-select'>SELECT</span>
+    </div>
+    <span class='timing'>195.73 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> select * from employee where last = Blow</div>
+  <div class='table-wrap'>
+    <table>
+<thead><tr>
+      <th>last</th>
+      <th>first</th>
+      <th>dep</th>
+      <th>salary</th>
+      <th>year</th>
+    </tr></thead>
+<tbody>
+    <tr><td>Blow</td><td>Joe</td><td>CS</td><td>100000</td><td>2018</td></tr>
+    <tr><td>Blow</td><td>JoAnn</td><td>Physics</td><td>200000</td><td>2016</td></tr>
+    </tbody></table>
+  </div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[0, 1]</span></div>
+</div>
+<div class='card' style='animation-delay:0.72s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#9</span>
+      <span class='badge badge-update'>UPDATE</span>
+    </div>
+    <span class='timing'>334.57 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> update employee set salary = 99999 where last = Johnson</div>
+  <div class='table-wrap'>
+    <table>
+<thead><tr>
+      <th>last</th>
+      <th>first</th>
+      <th>dep</th>
+      <th>salary</th>
+      <th>year</th>
+    </tr></thead>
+<tbody>
+    <tr><td>Johnson</td><td>Jack</td><td>HR</td><td>99999</td><td>2014</td></tr>
+    <tr><td>Johnson</td><td>Jimmy</td><td>Chemistry</td><td>99999</td><td>2018</td></tr>
+    </tbody></table>
+  </div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[2, 3]</span></div>
+</div>
+<div class='card' style='animation-delay:0.8s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#10</span>
+      <span class='badge badge-select'>SELECT</span>
+    </div>
+    <span class='timing'>2.25 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> select * from employee</div>
+  <div class='table-wrap'>
+    <table>
+<thead><tr>
+      <th>last</th>
+      <th>first</th>
+      <th>dep</th>
+      <th>salary</th>
+      <th>year</th>
+    </tr></thead>
+<tbody>
+    <tr><td>Blow</td><td>Joe</td><td>CS</td><td>100000</td><td>2018</td></tr>
+    <tr><td>Blow</td><td>JoAnn</td><td>Physics</td><td>200000</td><td>2016</td></tr>
+    <tr><td>Johnson</td><td>Jack</td><td>HR</td><td>99999</td><td>2014</td></tr>
+    <tr><td>Johnson</td><td>Jimmy</td><td>Chemistry</td><td>99999</td><td>2018</td></tr>
+    </tbody></table>
+  </div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[0, 1, 2, 3]</span></div>
+</div>
+<div class='card' style='animation-delay:0.88s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#11</span>
+      <span class='badge badge-make'>CREATE</span>
+    </div>
+    <span class='timing'>4.27 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> make table student fields fname, lname, major, age</div>
+  <div class='no-rows'>No rows returned</div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[none]</span></div>
+</div>
+<div class='card' style='animation-delay:0.96s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#12</span>
+      <span class='badge badge-insert'>INSERT</span>
+    </div>
+    <span class='timing'>7.42 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> insert into student values Flo, Yao, Art, 20</div>
+  <div class='no-rows'>No rows returned</div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[none]</span></div>
+</div>
+<div class='card' style='animation-delay:1.04s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#13</span>
+      <span class='badge badge-insert'>INSERT</span>
+    </div>
+    <span class='timing'>94.65 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> insert into student values Bo, Yang, CS, 28</div>
+  <div class='no-rows'>No rows returned</div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[none]</span></div>
+</div>
+<div class='card' style='animation-delay:1.12s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#14</span>
+      <span class='badge badge-insert'>INSERT</span>
+    </div>
+    <span class='timing'>125.28 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> insert into student values Billy, Jackson, Math, 27</div>
+  <div class='no-rows'>No rows returned</div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[none]</span></div>
+</div>
+<div class='card' style='animation-delay:1.2s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#15</span>
+      <span class='badge badge-insert'>INSERT</span>
+    </div>
+    <span class='timing'>149.82 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> insert into student values Mary, Davis, Math, 30</div>
+  <div class='no-rows'>No rows returned</div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[none]</span></div>
+</div>
+<div class='card' style='animation-delay:1.28s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#16</span>
+      <span class='badge badge-select'>SELECT</span>
+    </div>
+    <span class='timing'>125.51 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> select * from student</div>
+  <div class='table-wrap'>
+    <table>
+<thead><tr>
+      <th>fname</th>
+      <th>lname</th>
+      <th>major</th>
+      <th>age</th>
+    </tr></thead>
+<tbody>
+    <tr><td>Flo</td><td>Yao</td><td>Art</td><td>20</td></tr>
+    <tr><td>Bo</td><td>Yang</td><td>CS</td><td>28</td></tr>
+    <tr><td>Billy</td><td>Jackson</td><td>Math</td><td>27</td></tr>
+    <tr><td>Mary</td><td>Davis</td><td>Math</td><td>30</td></tr>
+    </tbody></table>
+  </div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[0, 1, 2, 3]</span></div>
+</div>
+<div class='card' style='animation-delay:1.36s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#17</span>
+      <span class='badge badge-select'>SELECT</span>
+    </div>
+    <span class='timing'>94.61 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> select * from student where (major=CS or major=Art)</div>
+  <div class='table-wrap'>
+    <table>
+<thead><tr>
+      <th>fname</th>
+      <th>lname</th>
+      <th>major</th>
+      <th>age</th>
+    </tr></thead>
+<tbody>
+    <tr><td>Flo</td><td>Yao</td><td>Art</td><td>20</td></tr>
+    <tr><td>Bo</td><td>Yang</td><td>CS</td><td>28</td></tr>
+    </tbody></table>
+  </div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[0, 1]</span></div>
+</div>
+<div class='card' style='animation-delay:1.44s'>
+  <div class='card-header'>
+    <div class='card-left'>
+      <span class='query-num'>#18</span>
+      <span class='badge badge-select'>SELECT</span>
+    </div>
+    <span class='timing'>188.79 ms</span>
+  </div>
+  <div class='sql-block'><span class='prompt'>&gt;</span> select * from student where lname&gt;J and (major=CS or major=Art)</div>
+  <div class='table-wrap'>
+    <table>
+<thead><tr>
+      <th>fname</th>
+      <th>lname</th>
+      <th>major</th>
+      <th>age</th>
+    </tr></thead>
+<tbody>
+    <tr><td>Flo</td><td>Yao</td><td>Art</td><td>20</td></tr>
+    <tr><td>Bo</td><td>Yang</td><td>CS</td><td>28</td></tr>
+    </tbody></table>
+  </div>
+  <div class='recnos'><span class='recnos-label'>records selected</span> <span class='recnos-val'>[0, 1]</span></div>
+</div>
+</main>
+
+<footer style="text-align:center;padding:32px;font-family:var(--mono);font-size:0.75rem;color:var(--muted);border-top:1px solid var(--border);">
+  Generated by SQL Engine &mdash; Custom C++ Database Implementation
+</footer>
+</body>
+</html>
